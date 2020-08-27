@@ -35,6 +35,7 @@ public class DeliveryCardTest {
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
         $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
+        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
         $("[placeholder='Дата встречи']").setValue(String.valueOf(date));
         $("[data-test-id=agreement]").click();
         $("button").click();
