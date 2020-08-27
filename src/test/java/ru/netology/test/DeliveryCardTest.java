@@ -1,19 +1,13 @@
-package ru.netoligy.test;
+package ru.netology.test;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
@@ -21,26 +15,15 @@ public class DeliveryCardTest {
 
     @Test
     void shouldSendDataForDelivery() {
-        LocalDate date = LocalDate.now().plusDays(4);
-
+        String date = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         open("http://localhost:9999/");
         $("[placeholder='Город']").setValue("Самара");
+        $(".calendar-input__custom-control input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $(".calendar-input__custom-control input").setValue(date);
         $("[name='name']").sendKeys("Василий Кот");
         $("[name='phone']").sendKeys("+79171249001");
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $("[placeholder='Дата встречи']").setValue(String.valueOf(date));
-        $("[data-test-id=agreement]").click();
-        $("button").click();
-        $(withText("Успешно!")).waitUntil(Condition.visible, 20000);
-
-
+        $("[data-test-id=agreement] .checkbox__box").click();
+        $("button.button").click();
+        $("[data-test-id=notification]").waitUntil(visible, 15000).shouldHave(text("Встреча успешно забронирована на " + date));
     }
 }
